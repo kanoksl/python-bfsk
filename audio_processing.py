@@ -175,6 +175,14 @@ def detect_frequency_2(wav_samples, sample_rate):
     #    x = input()
     return freq
 
+    
+def detect_frequency_3(wav_samples, sample_rate):
+    last_crossing = -1
+    for i in range(1, len(wav_samples)):
+        wa, wb = wav_samples[i - 1], wav_samples[i]
+        
+    
+    
 # -------------------------------------------------------------------------- #
 
 

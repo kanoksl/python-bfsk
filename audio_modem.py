@@ -89,6 +89,8 @@ class ModulatorDemodulator:
         :return: list of '0's and '1's.
         """
         bits = list()
+        
+        pt.plot_wav_analysis(wav_samples, sample_rate, [self.f0, self.f1], dft=True)
 
         # step 1: perform bandpass filter, keeping only frequencies around f0 and f1
         if False:

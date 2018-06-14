@@ -98,7 +98,7 @@ def generate_testcase(data_length, config, file_path='', audio=True):
         generate_testcase_audio(file_path)
 
 
-def run_testcase(file_path, duration=0, use_file=False):
+def run_testcase(file_path, duration=0, use_file=False, use_last_recorded=False):
     """
     Run a testcase. Test whether the transmitted data is identical to the original data.
 
@@ -116,9 +116,13 @@ def run_testcase(file_path, duration=0, use_file=False):
 
     if not use_file:
         wav, sr = io.input_from_microphone(duration)
+#        wav = wav[44100:]
         io.output_to_file(TESTCASE_FOLDER + 'last_recorded.wav', wav, sr)
     else:
-        wav, sr = io.input_from_file(file_path + '.wav')
+        if use_last_recorded:
+            wav, sr = io.input_from_file(TESTCASE_FOLDER + 'last_recorded.wav')
+        else:
+            wav, sr = io.input_from_file(file_path + '.wav')
     print('\n')
 
     bits = modem.demodulate(wav, sr)
@@ -149,7 +153,6 @@ def run_testcase(file_path, duration=0, use_file=False):
 
 
 def begin():
-
     # configurations - set the following values before executing. notes:
     #  - bit_rate should be a divisor of sample rate (44,100 hz) to avoid
     #    errors due to rounding.
@@ -159,7 +162,8 @@ def begin():
     bit_rate = 2205
     f0 = 11025
     f1 = 8820
-    easy_mode = False
+    easy_mode = True
+    last_rec = True
 
     # ---------------------------------------------------------------------- #
 
@@ -175,7 +179,7 @@ def begin():
     # print('plotting the generated audio file')
     # pt.plot_wav_analysis(wav, sr, [f0, f1], dft=True)
 
-    run_testcase(testcase_file, duration=0, use_file=easy_mode)
+    run_testcase(testcase_file, duration=0, use_file=easy_mode, use_last_recorded=last_rec)
 
 
 if __name__ == '__main__':
